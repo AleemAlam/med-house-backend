@@ -4,8 +4,14 @@ const userController = require("./controllers/user.controller");
 const postController = require("./controllers/post.controller");
 var bodyParser = require("body-parser");
 const manufactureController = require("./controllers/manufacture.controller");
-
 const app = express();
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/uploads"));
