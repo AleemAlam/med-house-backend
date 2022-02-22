@@ -8,7 +8,6 @@ const upload = require("./../utils/file-upload");
 router.get("/", async (req, res) => {
   try {
     const users = await User.find().lean().exec();
-
     res.status(200).json({ users });
   } catch (error) {
     return res.status(500).json({ status: "failed", message: error.message });

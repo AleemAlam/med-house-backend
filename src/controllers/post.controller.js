@@ -5,7 +5,7 @@ const upload = require("./../utils/file-upload");
 const allRoles = require("./../utils/roles");
 const Post = require("./../models/post.model");
 const fs = require("fs");
-const Comment = require("../models/comment.model");
+
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -20,21 +20,9 @@ router.get("/", async (req, res) => {
       .sort({ created_at: -1 })
       .lean()
       .exec();
-    const postWithComment = [];
-    for (let i = 0; i < posts.length; i++) {
-      const item = posts[i];
-      const comments = await Comment.find({ post: item._id })
-        .populate("user")
-        .lean()
-        .exec();
-
-      postWithComment.push({ ...item, commentCount: comments.length });
-    }
     const totalDoc = await Post.find().countDocuments().lean().exec();
     const totalPage = Math.ceil(totalDoc / size);
-    res
-      .status(200)
-      .json({ status: "success", posts: postWithComment, totalPage });
+    res.status(200).json({ status: "success", posts, totalPage, totalDoc });
   } catch (err) {
     res.status(500).json({ status: "error", message: err.message });
   }
